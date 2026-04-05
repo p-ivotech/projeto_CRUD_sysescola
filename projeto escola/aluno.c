@@ -14,7 +14,7 @@ typedef struct data{
     char cpf[12];
     char nome[50];
     char sexo;
-    char matricula[11];
+    char matricula[10];
     Data nascimento;
 } Dados;
 
@@ -25,11 +25,12 @@ void inserirAluno(Dados listaAlunos[],int qtdAlunos);
 void inserirAluno(Dados listaAlunos[],int qtdAlunos){
     getchar();
     printf("\nDigite a matricula do aluno: ");
-    fgets(listaAlunos[qtdAlunos].matricula,11,stdin);
+    fgets(listaAlunos[qtdAlunos].matricula,10,stdin);
     printf("\nDigite o nome do aluno: ");
     fgets(listaAlunos[qtdAlunos].nome,50,stdin);
     printf("\nDigite o CPF do aluno: ");
     fgets(listaAlunos[qtdAlunos].cpf,12,stdin);
+        //validação do cpf
     getchar();
     printf("\nDigite o sexo do aluno (M/F): ");
     scanf("%c",&listaAlunos[qtdAlunos].sexo);
@@ -39,6 +40,7 @@ void inserirAluno(Dados listaAlunos[],int qtdAlunos){
     scanf("%d",&listaAlunos[qtdAlunos].nascimento.mes);
     printf("\nDigite o ano de nascimento: ");
     scanf("%d",&listaAlunos[qtdAlunos].nascimento.ano);
+
 }
 
 void menuInicial(){
