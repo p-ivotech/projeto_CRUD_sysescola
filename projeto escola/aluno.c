@@ -3,6 +3,9 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
+#include "aluno.h"
+
+
 #define TAM 5
 typedef struct data{
     int dia;
