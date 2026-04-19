@@ -3,7 +3,6 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
-#include "aluno.h"
 
 
 #define TAM 5
@@ -26,7 +25,6 @@ void menuAluno();
 void inserirAluno(Dados listaAlunos[],int qtdAlunos);
 
 void inserirAluno(Dados listaAlunos[],int qtdAlunos){
-    getchar();
     printf("\nDigite a matricula do aluno: ");
     fgets(listaAlunos[qtdAlunos].matricula,10,stdin);
     printf("\nDigite o nome do aluno: ");
@@ -43,7 +41,6 @@ void inserirAluno(Dados listaAlunos[],int qtdAlunos){
     scanf("%d",&listaAlunos[qtdAlunos].nascimento.mes);
     printf("\nDigite o ano de nascimento: ");
     scanf("%d",&listaAlunos[qtdAlunos].nascimento.ano);
-
 }
 
 void menuInicial(){
@@ -92,6 +89,7 @@ int main(){
                     }
                     case 1:{ //1-cadastrar aluno
                         if (qtdAlunos < TAM){
+                            getchar();
                             inserirAluno(listaAlunos,qtdAlunos);
                             qtdAlunos++;
                         } else {
