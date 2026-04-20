@@ -3,9 +3,10 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
+#include "utilidades.h"
 
+#define TAM 2
 
-#define TAM 5
 typedef struct data{
     int dia;
     int mes;
@@ -13,22 +14,28 @@ typedef struct data{
 } Data;
 
  typedef struct {
+    int ativo;
     char cpf[12];
-    char nome[50];
+    char nome[100];
     char sexo;
-    char matricula[10];
+    int matricula;
     Data nascimento;
 } Dados;
 
-void menuInicial();
-void menuAluno();
+int menuListatem();
+int menuInicial();
+int menuAluno();
 void inserirAluno(Dados listaAlunos[],int qtdAlunos);
+void listarAlunos(int qtdAlunos, Dados listarAlunos[]);
+void atualizaAluno(int indice,Dados listaAlunos[]);
 
 void inserirAluno(Dados listaAlunos[],int qtdAlunos){
+    limparBuffer();
     printf("\nDigite a matricula do aluno: ");
-    fgets(listaAlunos[qtdAlunos].matricula,10,stdin);
+    scanf("%d",&listaAlunos[qtdAlunos].matricula);
+    limparBuffer();
     printf("\nDigite o nome do aluno: ");
-    fgets(listaAlunos[qtdAlunos].nome,50,stdin);
+    fgets(listaAlunos[qtdAlunos].nome,100,stdin);
     printf("\nDigite o CPF do aluno: ");
     fgets(listaAlunos[qtdAlunos].cpf,12,stdin);
         //validação do cpf
@@ -41,25 +48,79 @@ void inserirAluno(Dados listaAlunos[],int qtdAlunos){
     scanf("%d",&listaAlunos[qtdAlunos].nascimento.mes);
     printf("\nDigite o ano de nascimento: ");
     scanf("%d",&listaAlunos[qtdAlunos].nascimento.ano);
+    listaAlunos[qtdAlunos].ativo = 1;
 }
 
-void menuInicial(){
-    printf("--------MENU--------");
+void atualizaAluno(int indice,Dados listaAlunos[]){
+    limparBuffer();
+    printf("\nDigite a nova matricula do aluno: ");
+    scanf("%d",&listaAlunos[indice].matricula);
+    limparBuffer();
+    printf("\nDigite o novo nome do aluno: ");
+    fgets(listaAlunos[indice].nome,100,stdin);
+    printf("\nDigite o novo CPF do aluno: ");
+    fgets(listaAlunos[indice].cpf,12,stdin);
+        //validação do cpf
+    getchar();
+    printf("\nDigite o novo sexo do aluno (M/F): ");
+    scanf("%c",&listaAlunos[indice].sexo);
+    printf("\nDigite o novo dia de nascimento: ");
+    scanf("%d",&listaAlunos[indice].nascimento.dia);
+    printf("\nDigite o novo mes de nascimento: ");
+    scanf("%d",&listaAlunos[indice].nascimento.mes);
+    printf("\nDigite o novo ano de nascimento: ");
+    scanf("%d",&listaAlunos[indice].nascimento.ano);
+}
+
+int menuListatem(){
+    int opcaoLista;
+    printf("\n-----Menu de Listagem-----\n");
+    printf("\n1- Lista de Alunos");
+    printf("\n0 - Voltar");
+    printf("\nEscolha uma opcao: ");
+    scanf("%d",&opcaoLista);
+    return opcaoLista;
+}
+
+int menuInicial(){
+    int opcao;
+    printf("\n--------MENU--------\n");
     printf("\n0 - Sair\n");
     printf("\n1 - Cadastrar aluno");
     printf("\n2 - Cadastrar professor");
     printf("\n3 - Cadastrar disciplina");
     printf("\n4 - Pesquisar Listas");
     printf("\nEscolha um opcao:\n");
+    scanf("%d",&opcao);
+    return opcao;
 }
 
-void menuAluno(){
-    printf("--------MENU--------");
+int menuAluno(){
+    int opcaoAluno;
+    printf("\n--------MENU--------\n");
     printf("\n0 - Sair\n");
     printf("\n1 - Inserir aluno");
-    printf("\n2 - Atualizar aluno");
-    printf("\n3 - Excluir aluno");
+    printf("\n2 - Excluir aluno");
+    printf("\n3 - Atualizar aluno");
     printf("\nEscolha um opcao:\n");
+    scanf("%d",&opcaoAluno);
+    return opcaoAluno;
+}
+
+void listarAlunos(int qtdAlunos, Dados listaAlunos[]){
+    if (qtdAlunos == 0){
+        printf("Nao existem alunos cadastrados\n");
+    } else {
+        printf("Listando os alunos...");
+        for(int i = 0;i < qtdAlunos;i++){
+            if(listaAlunos[i].ativo == 1){
+                printf("\nMATRICULA: %d",listaAlunos[i].matricula);
+                printf("\nNome: %s",listaAlunos[i].nome);
+                printf("\nCPF: %s\n",listaAlunos[i].cpf);
+                printf("\nData de Nascimento: %d / %d / %d\n",listaAlunos[i].nascimento.dia,listaAlunos[i].nascimento.mes,listaAlunos[i].nascimento.ano);
+            }
+        }
+    }
 }
 
 int main(){
@@ -70,73 +131,125 @@ int main(){
     int sair = 0;
     int opcao;
 
-    while (sair == 0){
-    menuInicial();
-    scanf("%d",&opcao);
+    while (!sair){
+        opcao = menuInicial();
+        if (!valida_opcaoInicial(opcao)){
+            printf("OPCAO INVALIDA\n");
+        }
         switch (opcao){
+
             case 0:{
-                //sair do programa
                 sair = 1;
                 break;
             }
+
             case 1:{
-                menuAluno(); //menu aluno
-                int opcaoAluno;
-                scanf("%d",&opcaoAluno);
-                switch(opcaoAluno){
-                    case 0:{//voltar
-                    break;
+                int sairAluno = 0;
+
+                while (!sairAluno){
+                    int opcaoAluno = menuAluno();
+                    if (!valida_opcaoAluno(opcaoAluno)){
+                        printf("OPCAO INVALIDA\n");
                     }
-                    case 1:{ //1-cadastrar aluno
-                        if (qtdAlunos < TAM){
-                            getchar();
-                            inserirAluno(listaAlunos,qtdAlunos);
-                            qtdAlunos++;
-                        } else {
-                            printf("Lista de Alunos Completa");
+                    switch(opcaoAluno){
+
+                        case 0:{
+                            sairAluno = 1;
+                            break;
                         }
-                    break;
-                    }
-                    case 2:{//2-Excluir Aluno
-                    break;
-                    }
-                    case 3:{//3-Atualizar Aluno
-                    printf("Listando os alunos...");
-                        for(int i = 0;i < qtdAlunos;i++){
-                            printf("\nMATRICULA: %s",listaAlunos[i].matricula);
-                            printf("\nNome: %s",listaAlunos[i].nome);
-                            printf("\nCPF: %s\n",listaAlunos[i].cpf);
-                            printf("\nData de Nascimento: %d / %d / %d\n",listaAlunos[i].nascimento.dia,listaAlunos[i].nascimento.mes,listaAlunos[i].nascimento.ano);
+
+                        case 1:{
+                            if (qtdAlunos < TAM){
+                                inserirAluno(listaAlunos,qtdAlunos);
+                                qtdAlunos++;
+                            } else {
+                                printf("Lista de Alunos Completa\n");
+                            }
+                            break;
                         }
-                        //Escolhendo o livro para atualizar
+
+                        case 2:{
+                            if (qtdAlunos == 0){
+                                printf("Sem alunos cadastrados!");
+                            } else {
+                                listarAlunos(qtdAlunos,listaAlunos);
+
+                                int matricula;
+                                printf("Digite a matricula do aluno que deseja excluir: ");
+                                scanf("%d",&matricula);
+
+                                if (matricula < 0){
+                                    printf("Matricula invalida");
+                                }
+
+                                int indice = -1;
+                                for (int i = 0; i < qtdAlunos; i++){
+                                    if(matricula == listaAlunos[i].matricula && listaAlunos[i].ativo == 1){
+                                        indice = i;
+                                    }
+                                }
+                                if (indice == -1){
+                                    printf("Matricula nao encontrada");
+                                } else {
+                                    listaAlunos[indice].ativo = 0;
+                                }
+                            }
+                            break;
+                        }
+
+                        case 3:{
+                            listarAlunos(qtdAlunos,listaAlunos);
+
+                            int matricula;
+                            printf("Digite a matricula do aluno que deseja atualizar: ");
+                            scanf("%d",&matricula);
+
+                            if (matricula < 0){
+                                printf("Matricula invalida");
+                            }
+
+                            int indice = -1;
+                            for (int i = 0; i < qtdAlunos; i++){
+                                if(matricula == listaAlunos[i].matricula){
+                                    indice = i;
+                                }
+                            }
+
+                            if (indice == -1){
+                                printf("Matricula nao encontrada");
+                            } else {
+                                atualizaAluno(indice,listaAlunos);
+                            }
+                            break;
+                        }
                     }
                 }
-            break;
+                break;
             }
+
             case 4:{
-                int opcaoLista;
-                printf("\n-----Menu de Listagem-----\n");
-                printf("\n1- Lista de Alunos");
-                printf("\n0 - Voltar");
-                printf("\nEscolha uma opcao: ");
-                scanf("%d",&opcaoLista);
-                switch(opcaoLista){
-                    case 0:{
-                        break;//voltar para o menu;
-                    }
-                    case 1:{
-                        //listando os alunos
-                        printf("Listando os alunos...");
-                        for(int i = 0;i < qtdAlunos;i++){
-                            printf("\nMATRICULA: %s",listaAlunos[i].matricula);
-                            printf("\nNome: %s",listaAlunos[i].nome);
-                            printf("\nCPF: %s\n",listaAlunos[i].cpf);
-                            printf("\nData de Nascimento: %d / %d / %d\n",listaAlunos[i].nascimento.dia,listaAlunos[i].nascimento.mes,listaAlunos[i].nascimento.ano);
+                int sairLista = 0;
+
+                while (!sairLista){
+                    int opcaoLista = menuListatem();
+
+                    switch(opcaoLista){
+
+                        case 0:{
+                            sairLista = 1;
+                            break;
                         }
-                    break;
+
+                        case 1:{
+                            listarAlunos(qtdAlunos,listaAlunos);
+                            break;
+                        }
                     }
                 }
+                break;
             }
         }
     }
+
+    return 0;
 }
