@@ -6,6 +6,7 @@
 #include <ctype.h>
 #include "utilidades.h"
 #include "aluno.h"
+#include "dados.h"
 
 
 void inserirAluno(Dados listaAlunos[],int qtdAlunos){
@@ -24,8 +25,18 @@ void inserirAluno(Dados listaAlunos[],int qtdAlunos){
     limparBuffer();
     printf("\nDigite o nome do aluno: ");
     fgets(listaAlunos[qtdAlunos].nome,100,stdin);
-    printf("\nDigite o CPF do aluno: ");
-    fgets(listaAlunos[qtdAlunos].cpf,12,stdin);
+    
+    while (1) {
+        printf("\nDigite o CPF do aluno: ");
+        fgets(listaAlunos[qtdAlunos].cpf,12,stdin);
+        if (validaNumerosCPF(qtdAlunos,listaAlunos) == 1 || validaCPF(qtdAlunos,listaAlunos) == 1) {
+            printf("\nCPF inválido");
+        } else {
+            break;
+        }
+    }
+
+    
         //validação do cpf
     getchar();
     char sexo;
@@ -43,12 +54,23 @@ void inserirAluno(Dados listaAlunos[],int qtdAlunos){
         }
     }
 
-    printf("\nDigite o dia de nascimento: ");
-    scanf("%d",&listaAlunos[qtdAlunos].nascimento.dia);
-    printf("\nDigite o mes de nascimento: ");
-    scanf("%d",&listaAlunos[qtdAlunos].nascimento.mes);
-    printf("\nDigite o ano de nascimento: ");
-    scanf("%d",&listaAlunos[qtdAlunos].nascimento.ano);
+    int dia, mes, ano;
+    while (1){
+    printf("\nDigite o novo dia de nascimento: ");
+    scanf("%d",&dia);
+    printf("\nDigite o novo mes de nascimento: ");
+    scanf("%d",&mes);
+    printf("\nDigite o novo ano de nascimento: ");
+    scanf("%d",&ano);
+    if (validaDiaMesANo(dia,mes,ano)==0 && validaData(dia,mes,ano)==0){
+        listaAlunos[qtdAlunos].nascimento.dia = dia;
+        listaAlunos[qtdAlunos].nascimento.mes = mes;
+        listaAlunos[qtdAlunos].nascimento.ano = ano;
+        break;
+    } else {
+        printf("Data incorreta!");
+    }
+    }
     listaAlunos[qtdAlunos].ativo = 1;
 }
 
@@ -68,8 +90,15 @@ void atualizaAluno(int indice,Dados listaAlunos[]){
     limparBuffer();
     printf("\nDigite o novo nome do aluno: ");
     fgets(listaAlunos[indice].nome,100,stdin);
-    printf("\nDigite o novo CPF do aluno: ");
-    fgets(listaAlunos[indice].cpf,12,stdin);
+    while (1) {
+        printf("\nDigite o CPF do aluno: ");
+        fgets(listaAlunos[indice].cpf,12,stdin);
+        if (validaNumerosCPF(indice,listaAlunos) == 1 || validaCPF(indice,listaAlunos) == 1) {
+            printf("\nCPF inválido");
+        } else {
+            break;
+        }
+    }
         //validação do cpf
     getchar();
     char sexo;
@@ -86,13 +115,23 @@ void atualizaAluno(int indice,Dados listaAlunos[]){
         printf("Valor invalido! Digite M ou F.\n");
         }
     }
-
+    int dia, mes, ano;
+    while (1){
     printf("\nDigite o novo dia de nascimento: ");
-    scanf("%d",&listaAlunos[indice].nascimento.dia);
+    scanf("%d",&dia);
     printf("\nDigite o novo mes de nascimento: ");
-    scanf("%d",&listaAlunos[indice].nascimento.mes);
+    scanf("%d",&mes);
     printf("\nDigite o novo ano de nascimento: ");
-    scanf("%d",&listaAlunos[indice].nascimento.ano);
+    scanf("%d",&ano);
+    if (validaDiaMesANo(dia,mes,ano)==0 && validaData(dia,mes,ano)==0){
+        listaAlunos[indice].nascimento.dia = dia;
+        listaAlunos[indice].nascimento.mes = mes;
+        listaAlunos[indice].nascimento.ano = ano;
+        break;
+    } else {
+        printf("Data incorreta!");
+    }
+    }
 }
 
 int menuAluno(){

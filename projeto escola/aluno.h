@@ -1,20 +1,7 @@
 #ifndef ALUNO_H
 #define ALUNO_H
 
-typedef struct data{
-    int dia;
-    int mes;
-    int ano;
-} Data;
-
-typedef struct {
-    int ativo;
-    char cpf[12];
-    char nome[100];
-    char sexo;
-    int matricula;
-    Data nascimento;
-} Dados;
+#include "dados.h"
 
 void inserirAluno(Dados listaAlunos[],int qtdAlunos);
 void listarAlunos(int qtdAlunos, Dados listarAlunos[]);
